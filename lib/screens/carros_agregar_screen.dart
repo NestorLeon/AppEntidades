@@ -27,81 +27,77 @@ class AgregarCarroScreen extends StatelessWidget {
         children: [
           Expanded(
             flex: 3,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("ID"),
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Ingrese el ID',
-                      ),
-                      controller: txtIDController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^(\d+)?\.?\d{0,2}')),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Color"),
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Ingrese el Color',
-                      ),
-                      controller: txtColorController,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Modelo"),
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Ingrese el Modelo',
-                      ),
-                      controller: txtModeloController,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Marca"),
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Ingrese el Marca',
-                      ),
-                      controller: txtMarcaController,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text("Cantidad de Llantas"),
-                    TextField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Ingrese el Cantidad de Llantas',
-                      ),
-                      controller: txtCantidadDeLlantasController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)')),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+            child: ListView(
+              padding: const EdgeInsets.all(20.0),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              children: [
+                const Text("ID"),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Ingrese el ID',
+                  ),
+                  controller: txtIDController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^(\d+)?\.?\d{0,2}')),
                   ],
                 ),
-              ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Color"),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Ingrese el Color',
+                  ),
+                  controller: txtColorController,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Modelo"),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Ingrese el Modelo',
+                  ),
+                  controller: txtModeloController,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Marca"),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Ingrese el Marca',
+                  ),
+                  controller: txtMarcaController,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text("Cantidad de Llantas"),
+                TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Ingrese el Cantidad de Llantas',
+                  ),
+                  controller: txtCantidadDeLlantasController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: false),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^(\d+)')),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
             ),
           ),
           Expanded(
