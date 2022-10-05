@@ -1,11 +1,13 @@
-import 'package:ejemplo_1/classes/ordenamiento.dart';
-import 'package:ejemplo_1/screens/carros_agregar_screen.dart';
+import 'package:ejemplo_1/classes/ordenamiento_arreglo_lista.dart';
+import 'package:ejemplo_1/classes/ordenamiento_tabla_hash.dart';
 import 'package:ejemplo_1/screens/home_screen.dart';
-import 'package:ejemplo_1/screens/carros_lista_screen.dart';
+import 'package:ejemplo_1/screens/tabla_hash_dicc/carros_agregar_tabla_hash_screen.dart';
+import 'package:ejemplo_1/screens/tabla_hash_dicc/carros_tabla_hash_screen.dart';
+import 'package:ejemplo_1/screens/tabla_hash_dicc/home_tabla_hash_screen.dart';
 import 'package:flutter/material.dart';
 
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
+class NavigationDrawerTablaHash extends StatelessWidget {
+  const NavigationDrawerTablaHash({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class NavigationDrawer extends StatelessWidget {
               onTap: () => {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
+                    builder: (context) => const HomeTablaHashScreen(),
                   ),
                 )
               },
@@ -47,8 +49,8 @@ class NavigationDrawer extends StatelessWidget {
               onTap: () => {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => VerTodosScreen(
-                      carros: Ordenamiento.miListaDeCarros,
+                    builder: (context) => VerTodosTablaHashScreen(
+                      carros: OrdenamientoTablaHash.miTablaHashDeCarros,
                     ),
                   ),
                 )
@@ -63,9 +65,24 @@ class NavigationDrawer extends StatelessWidget {
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => AgregarCarroScreen(
-                      carros: Ordenamiento.miListaDeCarros,
+                    builder: (context) => AgregarCarroTablaHashScreen(
+                      carros: OrdenamientoTablaHash.miTablaHashDeCarros,
                     ),
+                  ),
+                );
+              },
+            ),
+            const Divider(
+              height: 1,
+              thickness: 1,
+            ),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Salir'),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
                   ),
                 );
               },

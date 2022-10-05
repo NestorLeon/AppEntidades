@@ -8,23 +8,30 @@ enum TipoDeOrdenamiento {
   ninguno,
 }
 
-class Ordenamiento {
-  static final List<Carro> miListaDeCarros = [];
+class OrdenamientoTablaHash {
+  static final Map<int, Carro> miTablaHashDeCarros = {};
   static TipoDeOrdenamiento tipoDeOrdenamiento = TipoDeOrdenamiento.ninguno;
 
   static List<Carro> search(
       String marca, String modelo, int cantidadDeLlantas) {
-    return miListaDeCarros
-        .where((car) =>
-            (car.marca.contains(marca) && car.modelo.contains(modelo)) &&
-            (cantidadDeLlantas == 0
-                ? true
-                : car.cantidadDeLlantas == cantidadDeLlantas))
-        .toList();
+    List<Carro> resultado = [];
+
+    miTablaHashDeCarros.forEach((key, carro) {
+      if ((carro.marca.toLowerCase().contains(marca.toLowerCase()) ||
+              carro.modelo.toLowerCase().contains(modelo.toLowerCase())) &&
+          (cantidadDeLlantas == 0
+              ? true
+              : carro.cantidadDeLlantas == cantidadDeLlantas)) {
+        resultado.add(carro);
+        if (resultado.length >= 5) return;
+      }
+    });
+
+    return resultado;
   }
 
   static void delete(Carro carro) {
-    miListaDeCarros.remove(carro);
+    miTablaHashDeCarros.remove(carro);
 
     switch (tipoDeOrdenamiento) {
       case TipoDeOrdenamiento.porMarca:
@@ -45,13 +52,13 @@ class Ordenamiento {
   }
 
   static void modify(Carro carroAnterior, Carro carroNuevo) {
-    int index = miListaDeCarros.indexOf(carroAnterior);
+    // int index = miTablaHashDeCarros(carroAnterior);
 
-    miListaDeCarros[index].cantidadDeLlantas = carroNuevo.cantidadDeLlantas;
-    miListaDeCarros[index].color = carroNuevo.color;
-    miListaDeCarros[index].marca = carroNuevo.marca;
-    miListaDeCarros[index].iD = carroNuevo.iD;
-    miListaDeCarros[index].modelo = carroNuevo.modelo;
+    // miTablaHashDeCarros[index].cantidadDeLlantas = carroNuevo.cantidadDeLlantas;
+    // miTablaHashDeCarros[index].color = carroNuevo.color;
+    // miTablaHashDeCarros[index].marca = carroNuevo.marca;
+    // miTablaHashDeCarros[index].iD = carroNuevo.iD;
+    // miTablaHashDeCarros[index].modelo = carroNuevo.modelo;
 
     switch (tipoDeOrdenamiento) {
       case TipoDeOrdenamiento.porMarca:
@@ -72,7 +79,9 @@ class Ordenamiento {
   }
 
   static void add(Carro carro) {
-    miListaDeCarros.add(carro);
+    Map<int, Carro> newElement = <int, Carro>{};
+    newElement[1] = carro;
+    miTablaHashDeCarros.addAll(newElement);
     switch (tipoDeOrdenamiento) {
       case TipoDeOrdenamiento.porMarca:
         porMarca();
@@ -92,7 +101,7 @@ class Ordenamiento {
   }
 
   static void poblarLista() {
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "GM",
@@ -101,7 +110,7 @@ class Ordenamiento {
         iD: 0.1,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "SUSUKI",
@@ -110,7 +119,7 @@ class Ordenamiento {
         iD: 1.1,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "MAZDA",
@@ -119,7 +128,7 @@ class Ordenamiento {
         iD: 0.3,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "TOYOTA",
@@ -128,13 +137,13 @@ class Ordenamiento {
         iD: 4.5,
       ),
     );
-    miListaDeCarros.add(Carro(
+    add(Carro(
         cantidadDeLlantas: 4,
         marca: "AUDI",
         modelo: "A4",
         color: "AZUL MARINO",
         iD: 0.5));
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "MCLAREN",
@@ -143,7 +152,7 @@ class Ordenamiento {
         iD: 3.3,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "HONDA",
@@ -152,7 +161,7 @@ class Ordenamiento {
         iD: 0.2,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "FORD",
@@ -161,7 +170,7 @@ class Ordenamiento {
         iD: 0.6,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "BMW",
@@ -170,7 +179,7 @@ class Ordenamiento {
         iD: 2.1,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "TESLA",
@@ -179,7 +188,7 @@ class Ordenamiento {
         iD: 1.8,
       ),
     );
-    miListaDeCarros.add(
+    add(
       Carro(
         cantidadDeLlantas: 4,
         marca: "FERRARI",
@@ -191,55 +200,63 @@ class Ordenamiento {
   }
 
   static void porMarca() {
-    for (int i = 0; i < miListaDeCarros.length; i++) {
-      for (int j = i; j < miListaDeCarros.length; j++) {
-        if (miListaDeCarros[i].marca.compareTo(miListaDeCarros[j].marca) > 0) {
-          Carro aux = miListaDeCarros[i];
-          miListaDeCarros[i] = miListaDeCarros[j];
-          miListaDeCarros[j] = aux;
-        }
-      }
-    }
+    // for (int i = 0; i < miTablaHashDeCarros.length; i++) {
+    //   for (int j = i; j < miTablaHashDeCarros.length; j++) {
+    //     if (miTablaHashDeCarros[i]
+    //             .marca
+    //             .compareTo(miTablaHashDeCarros[j].marca) >
+    //         0) {
+    //       Carro aux = miTablaHashDeCarros[i];
+    //       miTablaHashDeCarros[i] = miTablaHashDeCarros[j];
+    //       miTablaHashDeCarros[j] = aux;
+    //     }
+    //   }
+    // }
     tipoDeOrdenamiento = TipoDeOrdenamiento.porMarca;
   }
 
   static void porModelo() {
-    for (int i = 0; i < miListaDeCarros.length; i++) {
-      for (int j = i; j < miListaDeCarros.length; j++) {
-        if (miListaDeCarros[i].modelo.compareTo(miListaDeCarros[j].modelo) >
-            0) {
-          Carro aux = miListaDeCarros[i];
-          miListaDeCarros[i] = miListaDeCarros[j];
-          miListaDeCarros[j] = aux;
-        }
-      }
-    }
+    // for (int i = 0; i < miTablaHashDeCarros.length; i++) {
+    //   for (int j = i; j < miTablaHashDeCarros.length; j++) {
+    //     if (miTablaHashDeCarros[i]
+    //             .modelo
+    //             .compareTo(miTablaHashDeCarros[j].modelo) >
+    //         0) {
+    //       Carro aux = miTablaHashDeCarros[i];
+    //       miTablaHashDeCarros[i] = miTablaHashDeCarros[j];
+    //       miTablaHashDeCarros[j] = aux;
+    //     }
+    //   }
+    // }
     tipoDeOrdenamiento = TipoDeOrdenamiento.porModelo;
   }
 
   static void porColor() {
-    for (int i = 0; i < miListaDeCarros.length; i++) {
-      for (int j = i; j < miListaDeCarros.length; j++) {
-        if (miListaDeCarros[i].color.compareTo(miListaDeCarros[j].color) > 0) {
-          Carro aux = miListaDeCarros[i];
-          miListaDeCarros[i] = miListaDeCarros[j];
-          miListaDeCarros[j] = aux;
-        }
-      }
-    }
+    // for (int i = 0; i < miTablaHashDeCarros.length; i++) {
+    //   for (int j = i; j < miTablaHashDeCarros.length; j++) {
+    //     if (miTablaHashDeCarros[i]
+    //             .color
+    //             .compareTo(miTablaHashDeCarros[j].color) >
+    //         0) {
+    //       Carro aux = miTablaHashDeCarros[i];
+    //       miTablaHashDeCarros[i] = miTablaHashDeCarros[j];
+    //       miTablaHashDeCarros[j] = aux;
+    //     }
+    //   }
+    // }
     tipoDeOrdenamiento = TipoDeOrdenamiento.porColor;
   }
 
   static void porID() {
-    for (int i = 0; i < miListaDeCarros.length; i++) {
-      for (int j = i; j < miListaDeCarros.length; j++) {
-        if (miListaDeCarros[i].iD > miListaDeCarros[j].iD) {
-          Carro aux = miListaDeCarros[i];
-          miListaDeCarros[i] = miListaDeCarros[j];
-          miListaDeCarros[j] = aux;
-        }
-      }
-    }
+    // for (int i = 0; i < miTablaHashDeCarros.length; i++) {
+    //   for (int j = i; j < miTablaHashDeCarros.length; j++) {
+    //     if (miTablaHashDeCarros[i].iD > miTablaHashDeCarros[j].iD) {
+    //       Carro aux = miTablaHashDeCarros[i];
+    //       miTablaHashDeCarros[i] = miTablaHashDeCarros[j];
+    //       miTablaHashDeCarros[j] = aux;
+    //     }
+    //   }
+    // }
     tipoDeOrdenamiento = TipoDeOrdenamiento.porID;
   }
 }

@@ -1,20 +1,14 @@
-import 'package:ejemplo_1/classes/ordenamiento.dart';
-import 'package:ejemplo_1/screens/carros_lista_screen.dart';
+import 'package:ejemplo_1/classes/ordenamiento_tabla_hash.dart';
+import 'package:ejemplo_1/screens/tabla_hash_dicc/carros_tabla_hash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../classes/carro.dart';
+import '../../classes/carro.dart';
 
-class ModificarCarroScreen extends StatelessWidget {
-  Carro _carro = Carro(iD: 0);
+class AgregarCarroTablaHashScreen extends StatelessWidget {
+  final Map<int, Carro> carros = {};
 
-  ModificarCarroScreen({Key? key, required Carro carro}) : super(key: key) {
-    _carro = carro;
-    txtIDController.text = carro.iD.toString();
-    txtColorController.text = carro.color;
-    txtMarcaController.text = carro.marca;
-    txtCantidadDeLlantasController.text = carro.cantidadDeLlantas.toString();
-    txtModeloController.text = carro.modelo;
-  }
+  AgregarCarroTablaHashScreen({Key? key, required Map<int, Carro> carros})
+      : super(key: key);
 
   final txtIDController = TextEditingController();
   final txtMarcaController = TextEditingController();
@@ -26,7 +20,7 @@ class ModificarCarroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Modificar Carro"),
+        title: const Text("Agregar Carro"),
         //backgroundColor: Colors.amber,
       ),
       //backgroundColor: Colors.blueGrey,
@@ -118,8 +112,7 @@ class ModificarCarroScreen extends StatelessWidget {
                         MaterialStatePropertyAll<Color>(Colors.white),
                   ),
                   onPressed: () {
-                    Ordenamiento.modify(
-                      _carro,
+                    OrdenamientoTablaHash.add(
                       Carro(
                         cantidadDeLlantas:
                             int.parse(txtCantidadDeLlantasController.text),
@@ -131,8 +124,8 @@ class ModificarCarroScreen extends StatelessWidget {
                     );
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => VerTodosScreen(
-                          carros: Ordenamiento.miListaDeCarros,
+                        builder: (context) => VerTodosTablaHashScreen(
+                          carros: OrdenamientoTablaHash.miTablaHashDeCarros,
                         ),
                       ),
                     );
@@ -148,13 +141,7 @@ class ModificarCarroScreen extends StatelessWidget {
                         MaterialStatePropertyAll<Color>(Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => VerTodosScreen(
-                          carros: Ordenamiento.miListaDeCarros,
-                        ),
-                      ),
-                    );
+                    Navigator.of(context).pop();
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(12.0),

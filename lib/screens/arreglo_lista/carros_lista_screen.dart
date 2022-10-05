@@ -1,28 +1,28 @@
-import 'package:ejemplo_1/screens/carros_agregar_screen.dart';
-import 'package:ejemplo_1/screens/carros_modificar_screen.dart';
+import 'package:ejemplo_1/screens/arreglo_lista/carros_agregar_lista_screen.dart';
+import 'package:ejemplo_1/screens/arreglo_lista/carros_modificar_lista_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ejemplo_1/classes/carro.dart';
-import 'package:ejemplo_1/classes/ordenamiento.dart';
-import 'package:ejemplo_1/widgets/navigation_drawer.dart';
+import 'package:ejemplo_1/classes/ordenamiento_arreglo_lista.dart';
+import 'package:ejemplo_1/widgets/navigation_drawer_lista.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class VerTodosScreen extends StatefulWidget {
+class VerTodosListaScreen extends StatefulWidget {
   List<Carro> carros = [];
 
-  VerTodosScreen({Key? key, required this.carros}) : super(key: key);
+  VerTodosListaScreen({Key? key, required this.carros}) : super(key: key);
 
   @override
-  State<VerTodosScreen> createState() => _VerTodosScreenState();
+  State<VerTodosListaScreen> createState() => _VerTodosListaScreenState();
 }
 
-class _VerTodosScreenState extends State<VerTodosScreen> {
+class _VerTodosListaScreenState extends State<VerTodosListaScreen> {
   //List<Carro> carros = [];
 
   void onEdit(BuildContext context, int index) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => ModificarCarroScreen(
+        builder: (context) => ModificarCarroListaScreen(
           carro: widget.carros[index],
         ),
       ),
@@ -86,15 +86,15 @@ class _VerTodosScreenState extends State<VerTodosScreen> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AgregarCarroScreen(
-                carros: Ordenamiento.miListaDeCarros,
+              builder: (context) => AgregarCarroListaScreen(
+                carros: OrdenamientoLista.miListaDeCarros,
               ),
             ),
           );
         },
         child: const Icon(Icons.add_outlined),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: const NavigationDrawerLista(),
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
@@ -104,6 +104,12 @@ class _VerTodosScreenState extends State<VerTodosScreen> {
             ), */
             title: const Text('Ver Todos'),
             actions: [
+              IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
+                icon: const Icon(Icons.search),
+              ),
               PopupMenuButton(
                 itemBuilder: (context) {
                   return [
@@ -128,20 +134,20 @@ class _VerTodosScreenState extends State<VerTodosScreen> {
                 onSelected: (value) {
                   switch (value) {
                     case 0:
-                      Ordenamiento.porMarca();
+                      OrdenamientoLista.porMarca();
                       break;
                     case 1:
-                      Ordenamiento.porModelo();
+                      OrdenamientoLista.porModelo();
                       break;
                     case 2:
-                      Ordenamiento.porColor();
+                      OrdenamientoLista.porColor();
                       break;
                     case 3:
-                      Ordenamiento.porID();
+                      OrdenamientoLista.porID();
                       break;
                   }
                   setState(() {
-                    widget.carros = Ordenamiento.miListaDeCarros;
+                    widget.carros = OrdenamientoLista.miListaDeCarros;
                   });
                 },
               ),
@@ -189,7 +195,7 @@ class _VerTodosScreenState extends State<VerTodosScreen> {
                             'Se eliminó el elemento ${widget.carros[index].marca}-${widget.carros[index].modelo}',
                           );
                           setState(() {
-                            Ordenamiento.delete(widget.carros[index]);
+                            OrdenamientoLista.delete(widget.carros[index]);
                             //widget.carros.removeAt(index);
                           });
                         },
@@ -271,6 +277,82 @@ class _VerTodosScreenState extends State<VerTodosScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MySearchDelegate extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          if (query.isEmpty) {
+            close(context, null);
+          } else {
+            query = '';
+          }
+        },
+        icon: const Icon(
+          Icons.clear,
+        ),
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () => close(context, null),
+      icon: const Icon(Icons.arrow_back),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Center(
+      child: Text(
+        query,
+        style: const TextStyle(fontSize: 64, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    int? cantidadDeLlantas = int.tryParse(query);
+    List<Carro> suggestions =
+        OrdenamientoLista.search(query, query, cantidadDeLlantas ?? 0);
+
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestions[index];
+        return ListTile(
+          title: Text('${suggestion.marca} - ${suggestion.modelo}'),
+          subtitle: Text(
+              '${suggestion.color} - ${suggestion.cantidadDeLlantas.toString()}'),
+          leading: CircleAvatar(
+            radius: 20,
+            child: ClipOval(
+              child: Image.asset(
+                './assets/images/tocho.jpg',
+              ),
+            ),
+          ),
+          onTap: () {
+            // query = suggestion.marca;
+            // showResults(context);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => ModificarCarroListaScreen(
+                  carro: OrdenamientoLista.miListaDeCarros[index],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

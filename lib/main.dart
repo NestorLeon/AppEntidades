@@ -1,9 +1,11 @@
-import 'package:ejemplo_1/classes/ordenamiento.dart';
+import 'package:ejemplo_1/classes/ordenamiento_arreglo_lista.dart';
+import 'package:ejemplo_1/classes/ordenamiento_tabla_hash.dart';
 import 'package:ejemplo_1/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  Ordenamiento.poblarLista();
+  OrdenamientoLista.poblarLista();
+  OrdenamientoTablaHash.poblarLista();
 
   runApp(
     MaterialApp(
